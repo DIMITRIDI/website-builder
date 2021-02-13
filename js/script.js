@@ -1,41 +1,57 @@
 "use strict";
 
-const obj = {
-	a: 5,
-	b: 1
-};
+const model = [
+	{type: 'title', value: 'Hello World from JS'},
+	{type: 'text', value: 'here we go with some text'},
+	{type: 'columns', value: [
+		'11111111',
+		'22222222',
+		'33333333'
+	]},
+];
 
-//const copy = obj; //Ссылка на уже существующий объект
+const $site = document.querySelector('#site');
 
-//copy.a = 10;
+model.forEach(block => {
+	let html = '';
 
-//console.log(copy);
-//console.log(obj);
-
-function copy(mainObj) {
-	let objCopy = {};
-
-	let key;
-	for (key in mainObj) {
-		objCopy[key] = mainObj[key];
+	if (block.type === 'title') {
+		html = title(block);
+	} else if (block.type === 'text') {
+		html = text(block);
+	} else if (block.type === 'columns') {
+		html = columns(block);
 	}
 
-	return objCopy;
+	$site.insertAdjacentHTML('beforeend', html);
+
+});
+
+function title(block) {
+	return `
+		<div class="row">
+			<div class="col-sm">
+				<h1>${block.value}</h1>
+			</div>
+		</div>
+	`;
 }
 
-const numbers = {
-	a: 2,
-	b: 5,
-	c: {
-		x: 7,
-		y: 4
-	}
-};
+function text(block) {
+	return `
+		<div class="row">
+			<div class="col-sm">
+				<p>${block.value}</p>
+			</div>
+		</div>
+	`;
+}
 
-const newNumbers = copy(numbers);
-
-newNumbers.a = 10;
-newNumbers.c.x = 10;
-
-console.log(newNumbers);
-console.log(numbers);
+function columns(block) {
+	const html = block.value.map(item => `<div class="col-sm">${item}</div>`);
+	return `
+		<div class="row">
+			${html.join('')}
+		</div>
+	`;
+}
